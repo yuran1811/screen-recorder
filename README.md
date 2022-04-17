@@ -1,2 +1,1 @@
-# screen-recorder
-Screen Recorder App - ElectronJS
+# Screen Recorder App
