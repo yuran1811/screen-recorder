@@ -1,7 +1,7 @@
 const { writeFile } = require('fs');
 const { desktopCapturer, remote } = require('electron');
 const { dialog, Menu } = remote;
-const { startClickHandle, stopClickHandle } = require('./js/eventHandles.js');
+const { startClickHandle, stopClickHandle } = require('./js/eventHandles');
 
 const videoSelectBtn = document.querySelector('.tools button.source');
 const startBtn = document.querySelector('.tools button.start');

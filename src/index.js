@@ -1,6 +1,6 @@
 const path = require('path');
 const { app, BrowserWindow, Menu } = require('electron');
-const { startClickHandle, stopClickHandle } = require('./js/eventHandles.js');
+const { startClickHandle, stopClickHandle } = require('./js/eventHandles');
 require('electron-squirrel-startup') && app.quit();
 
 let mainWindow;

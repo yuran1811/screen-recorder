@@ -1,11 +1,11 @@
 {
-	"name": "electron-app",
-	"productName": "electron-app",
-	"description": "electron app",
-	"main": "./src/index.js",
+	"name": "screen-recorder",
+	"productName": "screen-recorder",
+	"description": "Screen Recorder",
 	"version": "1.0.0",
-	"author": "yuran",
+	"author": "yuran1811",
 	"license": "MIT",
+	"main": "./src/index.js",
 	"scripts": {
 		"start": "electron-forge start",
 		"package": "electron-forge package",
@@ -13,7 +13,8 @@
 		"publish": "electron-forge publish"
 	},
 	"keywords": [
-		"electron app"
+		"electron app",
+		"screen recorder"
 	],
 	"config": {
 		"forge": {

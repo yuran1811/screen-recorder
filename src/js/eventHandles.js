@@ -18,4 +18,6 @@ const stopClickHandle = () => {
 	};
 };
 
-module.exports = { startClickHandle, stopClickHandle };
+const eventHandles = { startClickHandle, stopClickHandle };
+
+module.exports = eventHandles;
