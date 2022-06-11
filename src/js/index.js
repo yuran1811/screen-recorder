@@ -124,23 +124,40 @@ class ScreenRecorder {
 	}
 
 	setWebcamVideo = async () => {
+		if (!this.mediaType.webcam) this.webcam && this.removeTracks([this.webcam]);
+
 		const { webcam } = this.constraints;
 
-		this.webcam = await navigator.mediaDevices.getUserMedia(webcam);
+		try {
+			this.webcam = await navigator.mediaDevices.getUserMedia(webcam);
 
-		this.webcamVideoEle.srcObject = this.webcam;
-		this.webcamVideoEle.onloadedmetadata = () => {
-			this.webcamVideoEle.requestPictureInPicture().then((PIPWindow) => {
-				PIPWindow.addEventListener('resize', () => onPipWindowResize(), false);
-			});
-			this.webcamVideoEle.play();
-		};
+			this.webcamVideoEle.srcObject = this.webcam;
+			this.webcamVideoEle.onloadedmetadata = () => {
+				this.webcamVideoEle.requestPictureInPicture().then((PIPWindow) => {
+					PIPWindow.addEventListener('resize', () => onPipWindowResize(), false);
+				});
+				this.webcamVideoEle.play();
+			};
+
+			console.log(this.stream, this.audio, this.webcam);
+		} catch (err) {
+			console.log('Cannot use webcam !');
+			console.log('More info: ', err);
+		}
 	};
 
 	setAudio = async () => {
+		if (!this.mediaType.audio) this.audio && this.removeTracks([this.audio]);
+
 		const { audio } = this.constraints;
 
-		this.audio = await navigator.mediaDevices.getUserMedia(audio);
+		try {
+			this.audio = await navigator.mediaDevices.getUserMedia(audio);
+			console.log(this.stream, this.audio, this.webcam);
+		} catch (error) {
+			console.log('Cannot use micro !');
+			console.log('More info: ', err);
+		}
 	};
 
 	setRecorder = () => {
@@ -165,13 +182,21 @@ class ScreenRecorder {
 	}
 
 	chooseMedia = async () => {
-		this.reset();
+		this.stream && this.removeTracks([this.stream]);
 
-		await this.setStream();
+		try {
+			await this.setStream();
+			console.log(this.stream, this.audio, this.webcam);
+		} catch (err) {
+			console.log('Please select one source !');
+			console.log('More info: ', err);
+		}
 	};
 
 	startRecording = () => {
 		const { stream, audio, webcam } = this;
+
+		console.log(stream, audio, webcam);
 
 		if (stream) {
 			this.changeStatus(1);
@@ -218,12 +243,11 @@ class ScreenRecorder {
 
 		this.hasAudioEle.onclick = (e) => {
 			this.changeMediaType(e, 'audio');
-			this.mediaType.audio && this.setAudio();
+			this.setAudio();
 		};
 		this.hasVideoEle.onclick = (e) => {
 			this.changeMediaType(e, 'video');
-			if (this.mediaType.video) this.setWebcamVideo();
-			else this.removeTracks([this.webcam]);
+			this.setWebcamVideo();
 		};
 	}
 }
