@@ -1,5 +1,5 @@
-# Screen Recorder App
+# Screen Recorder App - Web Version
 
 ### Technologies
 
-- ElectronJS
+- TailwindCSS
