@@ -1,5 +1,5 @@
-# Screen Recorder App
+# Screen Recorder - Desktop App
 
 ### Technologies
 
-- ElectronJS
+-   ElectronJS
