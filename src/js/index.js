@@ -23,42 +23,39 @@ class ScreenRecorder {
 		this.audio = null;
 		this.stream = null;
 		this.webcam = null;
+		// this.speaker = [];
+		this.speaker = null;
 		this.mixedStream = null;
 		this.recorder = null;
 
 		this.type = 0;
 		this.mediaType = {
-			video: 0,
-			audio: 0,
+			audio: false,
+			webcam: false,
+			speaker: false,
 		};
 
 		this.stopButton = $('.stop-btn');
 		this.startButton = $('.start-btn');
-		this.recordedVideo = $('.recorded-video');
 		this.downloadButton = $('.download-video-btn');
 		this.chooseMediaButton = $('.choose-media-btn');
 
 		this.hasAudioEle = $('.has-audio');
-		this.hasVideoEle = $('.has-video');
-		this.videoStreamEle = $('.video-stream');
-		this.webcamVideoEle = $('.webcam-video');
+		this.hasWebcamEle = $('.has-webcam');
+		// this.hasSpeakerEle = $('.has-speaker');
+		this.streamVideo = $('.stream-video');
+		this.webcamVideo = $('.webcam-video');
+		this.recordedVideo = $('.recorded-video');
 		this.recordedVideoWrap = $('.recorded-video-wrap');
 	}
 
-	getRecordOptions() {
-		return {
-			audio: this.hasAudioEle.className.includes('get-media'),
-			video: this.hasVideoEle.className.includes('get-media'),
-		};
-	}
-
-	removeTracks(targets) {
-		targets.forEach((target) => target.getTracks().forEach((_) => _.stop()));
+	removeAllTracks(targets) {
+		targets.forEach((target) => this[target]?.getTracks().forEach((_) => _.stop()));
 	}
 
 	changeStatus(type) {
 		const isChooseType = typeof type === 'number';
-		const another = ['start', 'stop'];
+		const anotherType = ['start', 'stop'];
 
 		if (isChooseType) {
 			this.stopButton.classList.toggle('hidden', !type);
@@ -66,9 +63,9 @@ class ScreenRecorder {
 			this.chooseMediaButton.innerText = type ? 'Other source' : 'Choose source';
 		}
 
-		if (another.includes(type)) {
-			this.startButton.disabled = type === 'stop';
+		if (anotherType.includes(type)) {
 			this.stopButton.disabled = type === 'start';
+			this.startButton.disabled = type === 'stop';
 		}
 
 		if (!type || type === 'stop') {
@@ -82,11 +79,21 @@ class ScreenRecorder {
 		}
 	}
 
-	changeMediaType(e, key) {
+	changeMediaType(key, loading = 0) {
+		const newKey = key[0].toUpperCase() + key.slice(1);
+
+		if (loading) {
+			this[`has${newKey}Ele`].classList.remove('get-media');
+			this[`has${newKey}Ele`].classList.remove('notget-media');
+			this[`has${newKey}Ele`].classList.add('loading-media');
+			return;
+		}
+
 		this.mediaType[key] = !this.mediaType[key];
 
-		e.currentTarget.classList.toggle('get-media', this.mediaType[key]);
-		e.currentTarget.classList.toggle('notget-media', !this.mediaType[key]);
+		this[`has${newKey}Ele`].classList.toggle('get-media', this.mediaType[key]);
+		this[`has${newKey}Ele`].classList.toggle('notget-media', !this.mediaType[key]);
+		this[`has${newKey}Ele`].classList.remove('loading-media');
 	}
 
 	handleDataAvailable = (e) => {
@@ -103,62 +110,25 @@ class ScreenRecorder {
 		this.recordedVideo.src = URL.createObjectURL(blob);
 		this.recordedVideo.load();
 		this.recordedVideo.onloadedmetadata = () => {
-			this.recordedVideo.play();
-
 			this.recordedVideoWrap.classList.remove('hidden');
 			this.recordedVideoWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			this.recordedVideo.play();
 		};
 
 		this.reset();
 
-		console.log('Prepare record...');
+		console.log('Finish record !');
 	};
 
 	setVideoStream() {
-		if (this.stream) {
-			this.videoStreamEle.srcObject = this.stream;
-			this.videoStreamEle.play();
-		} else {
+		if (!this.stream) {
 			console.warn('No stream available !');
+			return;
 		}
+
+		this.streamVideo.srcObject = this.stream;
+		this.streamVideo.play();
 	}
-
-	setWebcamVideo = async () => {
-		if (!this.mediaType.webcam) this.webcam && this.removeTracks([this.webcam]);
-
-		const { webcam } = this.constraints;
-
-		try {
-			this.webcam = await navigator.mediaDevices.getUserMedia(webcam);
-
-			this.webcamVideoEle.srcObject = this.webcam;
-			this.webcamVideoEle.onloadedmetadata = () => {
-				this.webcamVideoEle.requestPictureInPicture().then((PIPWindow) => {
-					PIPWindow.addEventListener('resize', () => onPipWindowResize(), false);
-				});
-				this.webcamVideoEle.play();
-			};
-
-			console.log(this.stream, this.audio, this.webcam);
-		} catch (err) {
-			console.log('Cannot use webcam !');
-			console.log('More info: ', err);
-		}
-	};
-
-	setAudio = async () => {
-		if (!this.mediaType.audio) this.audio && this.removeTracks([this.audio]);
-
-		const { audio } = this.constraints;
-
-		try {
-			this.audio = await navigator.mediaDevices.getUserMedia(audio);
-			console.log(this.stream, this.audio, this.webcam);
-		} catch (error) {
-			console.log('Cannot use micro !');
-			console.log('More info: ', err);
-		}
-	};
 
 	setRecorder = () => {
 		this.recorder = new MediaRecorder(this.mixedStream);
@@ -167,7 +137,85 @@ class ScreenRecorder {
 		this.recorder.start(200);
 	};
 
-	async setStream() {
+	setWebcam = async () => {
+		this.webcam && this.removeAllTracks(['webcam']);
+
+		if (this.mediaType.webcam) {
+			this.changeMediaType('webcam');
+			return;
+		}
+
+		try {
+			const { webcam } = this.constraints;
+
+			this.changeMediaType('webcam', 1);
+			this.webcam = await navigator.mediaDevices.getUserMedia(webcam);
+			this.changeMediaType('webcam');
+
+			this.webcamVideo.srcObject = this.webcam;
+			this.webcamVideo.onloadedmetadata = () => {
+				this.webcamVideo.requestPictureInPicture().then((PIPWindow) => {
+					PIPWindow.addEventListener('resize', () => onPipWindowResize(), false);
+				});
+				this.webcamVideo.play();
+			};
+		} catch (err) {
+			console.log('Cannot use webcam !');
+			console.log('More info: ', err);
+		}
+	};
+
+	setAudio = async () => {
+		this.audio && this.removeAllTracks(['audio']);
+
+		if (this.mediaType.audio) {
+			this.changeMediaType('audio');
+			return;
+		}
+
+		try {
+			const { audio } = this.constraints;
+
+			this.changeMediaType('audio', 1);
+			this.audio = await navigator.mediaDevices.getUserMedia(audio);
+			this.changeMediaType('audio');
+		} catch (err) {
+			console.log('Cannot use micro !');
+			console.log('More info: ', err);
+		}
+	};
+
+	setSpeaker = async () => {
+		// this.speaker.length && this.removeAllTracks(['speaker']);
+		this.speaker && this.removeAllTracks(['speaker']);
+
+		if (this.mediaType.speaker) {
+			this.changeMediaType('speaker');
+			// this.speaker.length = 0;
+			return;
+		}
+
+		try {
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const defaultSpeaker = devices.filter((_) => _.kind === 'audiooutput' && _.deviceId === 'default');
+			// const defaultSpeakers = devices.filter((_) => _.kind === 'audiooutput');
+
+			// defaultSpeakers.forEach(async (defaultSpeaker) => {
+			// 	const newSpeaker = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: defaultSpeaker } });
+			// 	this.speaker.push(newSpeaker);
+			// 	console.log(defaultSpeaker, this.speaker);
+			// });
+
+			this.speaker = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: defaultSpeaker } });
+
+			this.changeMediaType('speaker');
+		} catch (err) {
+			console.log('Cannot use speaker !');
+			console.log('More info: ', err);
+		}
+	};
+
+	setStream = async () => {
 		try {
 			const { stream } = this.constraints;
 
@@ -179,14 +227,15 @@ class ScreenRecorder {
 			console.log('Please choose the source to start recording !');
 			console.log('More info: ', err);
 		}
-	}
+	};
 
 	chooseMedia = async () => {
-		this.stream && this.removeTracks([this.stream]);
+		this.stream && this.removeAllTracks(['stream']);
 
 		try {
 			await this.setStream();
-			console.log(this.stream, this.audio, this.webcam);
+
+			this.streamVideo.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		} catch (err) {
 			console.log('Please select one source !');
 			console.log('More info: ', err);
@@ -194,26 +243,27 @@ class ScreenRecorder {
 	};
 
 	startRecording = () => {
-		const { stream, audio, webcam } = this;
+		const { audio, stream, webcam, speaker } = this;
 
-		console.log(stream, audio, webcam);
-
-		if (stream) {
-			this.changeStatus(1);
-			this.changeStatus('stop');
-
-			const tracks = [...stream.getTracks()];
-			audio && tracks.push(...audio.getTracks());
-			webcam && tracks.push(...webcam.getTracks());
-
-			this.mixedStream = new MediaStream(tracks);
-
-			this.setRecorder();
-
-			console.log('Recording...');
-		} else {
+		if (!stream) {
 			console.warn('No stream available !');
+			return;
 		}
+
+		this.changeStatus(1);
+		this.changeStatus('stop');
+		this.recordedVideoWrap.classList.add('hidden');
+
+		const tracks = [...stream.getTracks()];
+		audio && tracks.push(...audio.getTracks());
+		webcam && tracks.push(...webcam.getTracks());
+		speaker && tracks.push(...speaker.getTracks());
+
+		this.mixedStream = new MediaStream(tracks);
+
+		this.setRecorder();
+
+		console.log('Recording...');
 	};
 
 	stopRecording = () => {
@@ -227,28 +277,16 @@ class ScreenRecorder {
 
 	reset = () => {
 		this.chunks.length = 0;
-
-		const tracks = [];
-		this.audio && tracks.push(this.audio);
-		this.webcam && tracks.push(this.webcam);
-		this.stream && tracks.push(this.stream);
-
-		this.removeTracks(tracks);
+		this.removeAllTracks(['audio', 'stream', 'webcam', 'speaker']);
 	};
 
 	launch() {
+		this.hasAudioEle.onclick = this.setAudio;
+		this.hasWebcamEle.onclick = this.setWebcam;
+		// this.hasSpeakerEle.onclick = this.setSpeaker;
 		this.stopButton.onclick = this.stopRecording;
 		this.startButton.onclick = this.startRecording;
 		this.chooseMediaButton.onclick = this.chooseMedia;
-
-		this.hasAudioEle.onclick = (e) => {
-			this.changeMediaType(e, 'audio');
-			this.setAudio();
-		};
-		this.hasVideoEle.onclick = (e) => {
-			this.changeMediaType(e, 'video');
-			this.setWebcamVideo();
-		};
 	}
 }
 

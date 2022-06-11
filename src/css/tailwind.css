@@ -26,6 +26,10 @@
 		@apply flex justify-center items-center;
 	}
 
+	.custom-video {
+		@apply bg-black w-full h-auto mb-4 mx-auto;
+	}
+
 	.custom-btn {
 		@apply block bg-gray-700 font-bold text-white text-lg text-center mx-4 p-4 rounded-xl transition-all duration-300 hover:bg-slate-100 hover:text-black;
 	}
@@ -40,13 +44,22 @@
 }
 
 @layer utilities {
+	.loading-media .media-notuse,
 	.notget-media .media-notuse,
 	.get-media .media-use {
 		@apply block;
 	}
-
+	.loading-media .media-use,
 	.notget-media .media-use,
 	.get-media .media-notuse {
+		@apply hidden;
+	}
+
+	.loading-media .loading {
+		@apply inline-block;
+	}
+	.notget-media .loading,
+	.get-media .loading {
 		@apply hidden;
 	}
 }

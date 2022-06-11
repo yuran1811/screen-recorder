@@ -10,9 +10,9 @@
 		<title>Screen Recorder</title>
 	</head>
 	<body class="bg-gray-800 text-white">
-		<header class="bg-gray-900 sticky top-0 z-10">
-			<div class="container mx-auto flexcenter py-4">
-				<a target="_blank" rel="noopener" href="https://github.com/yuran1811/screen-recorder" class="text-2xl font-bold text-center"
+		<header class="sticky top-0 bg-gray-900 z-10">
+			<div class="container flexcenter mx-auto py-4">
+				<a target="_blank" rel="noopener" href="https://github.com/yuran1811/screen-recorder" class="font-bold text-2xl text-center"
 					>Simple Screen Recorder</a
 				>
 			</div>
@@ -20,23 +20,29 @@
 
 		<main class="overflow-hidden">
 			<div class="container mx-auto px-4 py-8">
-				<div class="flexcenter flex-wrap mb-6">
+				<div class="flexcenter flex-col mb-6">
 					<h1 class="text-center text-xl text-gray-300 my-3">Video Stream</h1>
 
-					<div class="flexcenter ml-3 my-3">
-						<div class="text-xl mx-3 cursor-pointer has-video notget-media">
+					<div class="flexcenter my-3">
+						<div class="flexcenter cursor-pointer text-xl mx-3 has-webcam notget-media">
 							<i class="fa-solid fa-video media-use"></i>
 							<i class="fa-solid fa-video-slash media-notuse"></i>
+							<i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
 						</div>
-						<div class="text-xl mx-3 cursor-pointer has-audio notget-media">
+						<div class="flexcenter cursor-pointer text-xl mx-3 has-audio notget-media">
 							<i class="fa-solid fa-microphone media-use"></i>
 							<i class="fa-solid fa-microphone-slash media-notuse"></i>
+							<i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
 						</div>
+						<!-- <div class="cursor-pointer text-xl mx-3 has-speaker notget-media">
+							<i class="fa-solid fa-volume-high media-use"></i>
+							<i class="fa-solid fa-volume-xmark media-notuse"></i>
+						</div> -->
 					</div>
 				</div>
 
-				<video autoplay controls class="webcam-video bg-black max-w-[200px] w-full h-auto mb-4 mx-auto"></video>
-				<video autoplay class="video-stream bg-black max-w-2xl w-full h-auto mb-4 mx-auto"></video>
+				<video autoplay controls class="webcam-video custom-video max-w-[200px]"></video>
+				<video autoplay class="stream-video custom-video max-w-2xl"></video>
 
 				<div class="flexcenter mx-4">
 					<button class="choose-media-btn custom-btn">Choose source</button>
@@ -47,7 +53,7 @@
 				<div class="recorded-video-wrap mt-10 hidden">
 					<h2 class="text-xl text-gray-300 text-center p-6">Download recorded video</h2>
 
-					<video controls class="recorded-video bg-black max-w-2xl w-full h-auto mb-4 mx-auto"></video>
+					<video controls class="recorded-video custom-video max-w-2xl"></video>
 
 					<div class="flexcenter mx-4">
 						<a class="download-video-btn custom-btn" disabled> <i class="fa-solid fa-file-arrow-down"></i> Download </a>
