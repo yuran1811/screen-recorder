@@ -1,5 +1,5 @@
-# Screen Recorder App - Web Version
+# Screen Recorder - Web Version
 
 ### Technologies
 
-- TailwindCSS
+-   TailwindCSS
