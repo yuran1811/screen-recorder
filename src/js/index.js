@@ -150,7 +150,6 @@ class ScreenRecorder {
 
 			this.changeMediaType('webcam', 1);
 			this.webcam = await navigator.mediaDevices.getUserMedia(webcam);
-			this.changeMediaType('webcam');
 
 			this.webcamVideo.srcObject = this.webcam;
 			this.webcamVideo.onloadedmetadata = () => {
@@ -162,6 +161,9 @@ class ScreenRecorder {
 		} catch (err) {
 			console.log('Cannot use webcam !');
 			console.log('More info: ', err);
+			this.changeMediaType('webcam');
+		} finally {
+			this.changeMediaType('webcam');
 		}
 	};
 
@@ -178,10 +180,12 @@ class ScreenRecorder {
 
 			this.changeMediaType('audio', 1);
 			this.audio = await navigator.mediaDevices.getUserMedia(audio);
-			this.changeMediaType('audio');
 		} catch (err) {
 			console.log('Cannot use micro !');
 			console.log('More info: ', err);
+			this.changeMediaType('audio');
+		} finally {
+			this.changeMediaType('audio');
 		}
 	};
 
@@ -207,11 +211,12 @@ class ScreenRecorder {
 			// });
 
 			this.speaker = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: defaultSpeaker } });
-
-			this.changeMediaType('speaker');
 		} catch (err) {
 			console.log('Cannot use speaker !');
 			console.log('More info: ', err);
+			this.changeMediaType('speaker');
+		} finally {
+			this.changeMediaType('speaker');
 		}
 	};
 
