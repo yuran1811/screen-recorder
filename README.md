@@ -2,4 +2,4 @@
 
 ### Technologies
 
--   TailwindCSS
+- TailwindCSS

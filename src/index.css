@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  * {
+    @apply select-none;
+
+    &::-webkit-scrollbar {
+      @apply w-[7px] h-[4px];
+
+      &-track {
+        @apply bg-gray-900;
+      }
+
+      &-thumb {
+        @apply bg-gray-500 rounded-3xl;
+      }
+    }
+  }
+
+  i {
+    @apply mx-2;
+  }
+}
+@layer components {
+  .flexcenter {
+    @apply flex justify-center items-center;
+  }
+
+  .custom {
+    &-video {
+      @apply bg-black w-full h-auto mb-4 mx-auto;
+    }
+
+    &-btn {
+      @apply block bg-gray-700 font-bold text-white text-lg text-center mx-4 p-4 rounded-xl transition-all duration-300 hover:bg-slate-100 hover:text-black;
+    }
+  }
+
+  .start-btn {
+    @apply hover:bg-blue-400 disabled:text-white disabled:bg-red-400;
+  }
+
+  .stop-btn {
+    @apply disabled:opacity-50;
+  }
+}
+@layer utilities {
+  .loading-media {
+    .loading {
+      @apply inline-block;
+    }
+
+    .media {
+      &-use {
+        @apply hidden;
+      }
+
+      &-notuse {
+        @apply block;
+      }
+    }
+  }
+
+  .get-media {
+    .loading {
+      @apply hidden;
+    }
+
+    .media {
+      &-use {
+        @apply block;
+      }
+
+      &-notuse {
+        @apply hidden;
+      }
+    }
+  }
+
+  .notget-media {
+    .loading {
+      @apply hidden;
+    }
+
+    .media {
+      &-use {
+        @apply hidden;
+      }
+
+      &-notuse {
+        @apply block;
+      }
+    }
+  }
+}

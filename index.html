@@ -1,67 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="shortcut icon" href="./src/img/tailwindcss.svg" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-		<link rel="stylesheet" href="./src/css/main.css" />
-		<title>Screen Recorder</title>
-	</head>
-	<body class="bg-gray-800 text-white">
-		<header class="sticky top-0 bg-gray-900 z-10">
-			<div class="container flexcenter mx-auto py-4">
-				<a target="_blank" rel="noopener" href="https://github.com/yuran1811/screen-recorder" class="font-bold text-2xl text-center"
-					>Simple Screen Recorder</a
-				>
-			</div>
-		</header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/tailwindcss.svg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <script type="module" src="/main.js"></script>
+    <title>Screen Recorder</title>
+  </head>
+  <body class="bg-gray-800 text-white">
+    <header class="sticky top-0 bg-gray-900 z-10">
+      <div class="container flexcenter mx-auto py-4">
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://github.com/yuran1811/screen-recorder"
+          class="font-bold text-2xl text-center"
+          >Simple Screen Recorder</a
+        >
+      </div>
+    </header>
 
-		<main class="overflow-hidden">
-			<div class="container mx-auto px-4 py-8">
-				<div class="flexcenter flex-col mb-6">
-					<h1 class="text-center text-xl text-gray-300 my-3">Video Stream</h1>
+    <main class="overflow-hidden">
+      <div class="container mx-auto px-4 py-8">
+        <div class="flexcenter flex-col mb-6">
+          <h1 class="text-center text-xl text-gray-300 my-3">Video Stream</h1>
 
-					<div class="flexcenter my-3">
-						<div class="flexcenter cursor-pointer text-xl mx-3 has-webcam notget-media">
-							<i class="fa-solid fa-video media-use"></i>
-							<i class="fa-solid fa-video-slash media-notuse"></i>
-							<i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
-						</div>
-						<div class="flexcenter cursor-pointer text-xl mx-3 has-audio notget-media">
-							<i class="fa-solid fa-microphone media-use"></i>
-							<i class="fa-solid fa-microphone-slash media-notuse"></i>
-							<i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
-						</div>
-						<!-- <div class="cursor-pointer text-xl mx-3 has-speaker notget-media">
+          <div class="flexcenter my-3">
+            <div class="flexcenter cursor-pointer text-xl mx-3 has-webcam notget-media">
+              <i class="fa-solid fa-video media-use"></i>
+              <i class="fa-solid fa-video-slash media-notuse"></i>
+              <i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
+            </div>
+            <div class="flexcenter cursor-pointer text-xl mx-3 has-audio notget-media">
+              <i class="fa-solid fa-microphone media-use"></i>
+              <i class="fa-solid fa-microphone-slash media-notuse"></i>
+              <i class="fa-solid fa-arrow-rotate-right w-[20px] h-[20px] animate-spin loading"></i>
+            </div>
+            <!-- <div class="cursor-pointer text-xl mx-3 has-speaker notget-media">
 							<i class="fa-solid fa-volume-high media-use"></i>
 							<i class="fa-solid fa-volume-xmark media-notuse"></i>
 						</div> -->
-					</div>
-				</div>
+          </div>
+        </div>
 
-				<video autoplay controls class="webcam-video custom-video max-w-[200px]"></video>
-				<video autoplay class="stream-video custom-video max-w-2xl"></video>
+        <video autoplay controls class="webcam-video custom-video max-w-[200px]"></video>
+        <video autoplay class="stream-video custom-video max-w-2xl"></video>
 
-				<div class="flexcenter mx-4">
-					<button class="choose-media-btn custom-btn">Choose source</button>
-					<button class="start-btn custom-btn hidden">Start</button>
-					<button class="stop-btn custom-btn hidden" disabled>Stop</button>
-				</div>
+        <div class="flexcenter mx-4">
+          <button class="choose-media-btn custom-btn">Choose source</button>
+          <button class="start-btn custom-btn hidden">Start</button>
+          <button class="stop-btn custom-btn hidden" disabled>Stop</button>
+        </div>
 
-				<div class="recorded-video-wrap mt-10 hidden">
-					<h2 class="text-xl text-gray-300 text-center p-6">Download recorded video</h2>
+        <div class="recorded-video-wrap mt-10 hidden">
+          <h2 class="text-xl text-gray-300 text-center p-6">Download recorded video</h2>
 
-					<video controls class="recorded-video custom-video max-w-2xl"></video>
+          <video controls class="recorded-video custom-video max-w-2xl"></video>
 
-					<div class="flexcenter mx-4">
-						<a class="download-video-btn custom-btn" disabled> <i class="fa-solid fa-file-arrow-down"></i> Download </a>
-					</div>
-				</div>
-			</div>
-		</main>
-
-		<script src="./src/js/index.js"></script>
-	</body>
+          <div class="flexcenter mx-4">
+            <a class="download-video-btn custom-btn" disabled> <i class="fa-solid fa-file-arrow-down"></i> Download </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
